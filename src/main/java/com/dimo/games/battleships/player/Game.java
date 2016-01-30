@@ -12,6 +12,7 @@ import com.dimo.games.battleships.service.BattlefieldService;
 public class Game {
 	private static final Pattern inputPattern = Pattern.compile("show|[a-z][0-9]{1,2}");
 	private BattlefieldService service;
+	//here the approach from the Battlefield class can be used (e.g. with a Map)
 	private char[][] userBoard;
 	private int shotsFired;
 	private int enemyShips;
