@@ -57,6 +57,7 @@ public class Battlefield {
 			for (int i = x; i < x + length; i++) {
 				if (i > this.width - 1 || positionsToShips.containsKey(new BattlefieldCell(i, y))) {
 					for (int j = i - 1; j >= x; j--) {
+						//can't add, revert
 						positionsToShips.remove(new BattlefieldCell(j, y));
 					}
 					return false;
@@ -68,6 +69,7 @@ public class Battlefield {
 			for (int i = y; i < y + length; i++) {
 				if (i > this.height - 1 || positionsToShips.containsKey(new BattlefieldCell(x, i))) {
 					for (int j = i - 1; j >= y; j--) {
+						//can't add, revert
 						positionsToShips.remove(new BattlefieldCell(x, j));
 					}
 					return false;
