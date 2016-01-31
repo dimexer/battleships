@@ -22,10 +22,6 @@ public class Battlefield {
 			int x = (int) (Math.random() * 10);
 			int y = (int) (Math.random() * 10);
 
-			if (positionsToShips.containsKey(new BattlefieldCell(x, y))) {
-				continue;
-			}
-
 			boolean horizontal = Math.random() < 0.5;
 			placed = this.placeShipOnPosition(x, y, ship, horizontal);
 		}
@@ -43,39 +39,32 @@ public class Battlefield {
 		return HitType.MISS;
 	}
 
-	public List<int[]> getCoords(){
+	public List<int[]> getCoords() {
 		List<int[]> coords = new ArrayList<int[]>();
-		for(BattlefieldCell  c : this.positionsToShips.keySet()){
-			coords.add(new int[]{c.getX(), c.getY()});
+		for (BattlefieldCell c : this.positionsToShips.keySet()) {
+			coords.add(new int[] { c.getX(), c.getY() });
 		}
 		return coords;
 	}
-	
+
 	private boolean placeShipOnPosition(int x, int y, Ship s, boolean horizontal) {
 		int length = s.getShipType().getSize();
-		if (horizontal) {
-			for (int i = x; i < x + length; i++) {
-				if (i > this.width - 1 || positionsToShips.containsKey(new BattlefieldCell(i, y))) {
-					for (int j = i - 1; j >= x; j--) {
-						//can't add, revert
-						positionsToShips.remove(new BattlefieldCell(j, y));
-					}
-					return false;
-				} else {
-					positionsToShips.put(new BattlefieldCell(i, y), s);
+
+		if (!horizontal) {
+			int tmp = x;
+			x = y;
+			y = tmp;
+		}
+		for (int i = x; i < x + length; i++) {
+			if (i > (horizontal? this.width : this.height) - 1 || positionsToShips
+					.containsKey(horizontal ? new BattlefieldCell(i, y) : new BattlefieldCell(y, i))) {
+				for (int j = i - 1; j >= x; j--) {
+					// can't add, revert
+					positionsToShips.remove(horizontal ? new BattlefieldCell(j, y) : new BattlefieldCell(y, j));
 				}
-			}
-		} else {
-			for (int i = y; i < y + length; i++) {
-				if (i > this.height - 1 || positionsToShips.containsKey(new BattlefieldCell(x, i))) {
-					for (int j = i - 1; j >= y; j--) {
-						//can't add, revert
-						positionsToShips.remove(new BattlefieldCell(x, j));
-					}
-					return false;
-				} else {
-					positionsToShips.put(new BattlefieldCell(x, i), s);
-				}
+				return false;
+			} else {
+				positionsToShips.put(horizontal ? new BattlefieldCell(i, y) : new BattlefieldCell(y, i), s);
 			}
 		}
 		return true;
